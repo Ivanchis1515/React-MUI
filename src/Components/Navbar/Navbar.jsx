@@ -38,7 +38,7 @@ const Navbar = ({ArrayNavLinks, toggleDarkMode, darkMode}) => {
                         <MenuIcon />
                     </IconButton>
                     <Img src={Logo} alt="Logo" style={{ marginRight: '8px' }} />
-                    <Typography  variant="h6" sx={{flexGrow:1}}>Electronics</Typography>
+                    <Typography  variant="h6" sx={{flexGrow:1}}>Power*Tech</Typography>
                     <Box sx={{display:{xs:"none", sm:"block"}}}>
                         {
                             ArrayNavLinks.map(item => (
