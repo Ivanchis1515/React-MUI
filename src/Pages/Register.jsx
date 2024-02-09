@@ -3,7 +3,7 @@ import { Container, Typography, Grid, Card, CardContent, Button, TextField } fro
 import { styled } from "@mui/system";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
-const LoginForm = styled('form')({
+const RegistrationForm = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   gap: '16px',
@@ -11,25 +11,36 @@ const LoginForm = styled('form')({
   margin: 'auto',
 });
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [usernameError, setUsernameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-  const handleLogin = () => {
-    // Implement authentication logic here
+  const handleRegister = () => {
+    // Implement user registration logic here
     if (!username.trim()) {
       setUsernameError(true);
+    }
+    if (!email.trim() || !validateEmail(email)) {
+      setEmailError(true);
     }
     if (!password.trim()) {
       setPasswordError(true);
     }
 
-    if (username.trim() && password.trim()) {
-      console.log('Login with:', username, password);
-      // Add further authentication logic here
+    if (username.trim() && email.trim() && validateEmail(email) && password.trim()) {
+      console.log('Register with:', username, email, password);
+      // Add further registration logic here
     }
+  };
+
+  const validateEmail = (email) => {
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   return (
@@ -38,12 +49,12 @@ const Login = () => {
         <Card>
           <CardContent>
             <Typography variant="h5" align="center" gutterBottom>
-              Iniciar sesión
+              Registro de usuario
             </Typography>
-            <LoginForm
+            <RegistrationForm
               onSubmit={(e) => {
                 e.preventDefault();
-                handleLogin();
+                handleRegister();
               }}
             >
               <TextField
@@ -59,6 +70,18 @@ const Login = () => {
                 helperText={usernameError ? 'El usuario no puede estar vacío' : ''}
               />
               <TextField
+                label="Correo electrónico"
+                variant="outlined"
+                fullWidth
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError(false);
+                }}
+                error={emailError}
+                helperText={emailError ? 'Ingrese un correo electrónico válido' : ''}
+              />
+              <TextField
                 label="Contraseña"
                 variant="outlined"
                 type="password"
@@ -72,9 +95,9 @@ const Login = () => {
                 helperText={passwordError ? 'La contraseña no puede estar vacía' : ''}
               />
               <Button type="submit" variant="contained" color="primary" endIcon={<ArrowRightAltIcon />}>
-                Iniciar sesión
+                Registrarse
               </Button>
-            </LoginForm>
+            </RegistrationForm>
           </CardContent>
         </Card>
       </Grid>
@@ -82,4 +105,5 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
+    

@@ -1,13 +1,15 @@
+//importaciones de react
 import React from 'react'
 import { useState } from "react";
 import ReactDOM from 'react-dom/client'
 
 //uso de la libreria CssBaseline para el estilo de MUI
 import { CssBaseline, ThemeProvider } from "@mui/material";
-//importacion del componente estilizado
-import { lightTheme, darkTheme } from './Components/StyledComponent';
 //importacion de react router
 import { BrowserRouter } from "react-router-dom";
+
+//importacion del componente estilizado
+import StyledComponent from './Components/Temas/StyledComponent';
 
 //importacion de las rutas principales
 import Rutas from "./RoutePages";
@@ -20,18 +22,25 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  //variables de cambio
+  const [mainColor, setMainColor] = useState('#3f51b5'); // Color inicial
+  const [darkMode, setDarkMode] = useState(false); //cambia el modo
 
   const toggleDarkMode = () => {
-    setDarkMode((prevMode) => !prevMode);
+    setDarkMode(!darkMode);
   };
+  const handleColorChange = (color) => {
+    setMainColor(color);
+  };
+
+  const theme = StyledComponent(mainColor, darkMode);
 
   return (
     <React.StrictMode>
-      <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <ThemeProvider theme={theme} >
         <BrowserRouter>
           <CssBaseline />
-          <Rutas toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+          <Rutas handleColorChange={handleColorChange} handleToggleDarkMode={toggleDarkMode} darkMode={darkMode}/>
         </BrowserRouter>
       </ThemeProvider>
     </React.StrictMode>

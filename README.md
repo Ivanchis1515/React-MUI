@@ -30,3 +30,7 @@ Instalacion de comandos
     sino solo se agrega en el componente que requiera MUI
 13. Uso del componente themeProvider para cambiar estilos de donde sea necesario (crear un archivo y hacerle
     referencia en (ThemeProvider theme={theme})
+14. Para uso de animaciones y scroll 
+    npm install react-spring
+15. Para hacer carrusel de imagenes
+    npm install react-slick slick-carousel
