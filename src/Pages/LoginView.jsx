@@ -5,6 +5,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
 import { Link as RouterLink } from 'react-router-dom'; //manejador para no recargar la pagina
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useTheme } from '@mui/material/styles'; //para uso de temas en MUI
+import ReCAPTCHA from "react-google-recaptcha"; //Google Recaptcha
 
 //recursos
 import Carrusel from "../Components/ComponentUI/CarruselImages";
@@ -26,6 +27,11 @@ const opiniones = [
 ];
 const LoginForm = () => {
     const theme = useTheme();
+    const [isCaptchaComplete, setIsCaptchaComplete] = useState(false);
+    const handleRecaptchaChange = (value) => {
+        setRecaptchaValue(value);
+    };
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -45,6 +51,10 @@ const LoginForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
     
+        if (!isCaptchaComplete) {
+            console.log('Por favor, completa el captcha');
+            return;
+        }
         // Validación del formulario
         let valid = true;
         const errors = {
@@ -158,6 +168,24 @@ const LoginForm = () => {
                                                         Registrate aqui.
                                                     </RouterLink>
                                                 </Typography>
+                                                <Box display="flex" justifyContent="center" mt={2}>
+                                                    <ReCAPTCHA
+                                                        sitekey="6LdwZmspAAAAANUS3pN7mHhG7RGm6mA9v6ZIZxjf"
+                                                        onChange={(value) => {
+                                                            handleRecaptchaChange(value);
+                                                            setIsCaptchaComplete(true);
+                                                        }}
+                                                    />
+                                                </Box>
+                                                {isCaptchaComplete ? (
+                                                    <Typography variant="caption" color="primary">
+                                                        Captcha completado correctamente.
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography variant="caption" color="primary">
+                                                        Por favor, complete el captcha.
+                                                    </Typography>
+                                                )}
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Button
