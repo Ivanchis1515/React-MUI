@@ -29,7 +29,7 @@ const LoginForm = () => {
     const theme = useTheme();
     const [isCaptchaComplete, setIsCaptchaComplete] = useState(false);
     const handleRecaptchaChange = (value) => {
-        setRecaptchaValue(value);
+        setIsCaptchaComplete(true);
     };
 
     const [formData, setFormData] = useState({
