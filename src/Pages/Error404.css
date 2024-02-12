@@ -1,0 +1,110 @@
+body {
+    margin: 0;
+    overflow-x: hidden; /* Puedes ocultar la barra de desplazamiento horizontal si no es necesaria */
+    overflow-y: auto;
+}
+
+.error-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #111; /* Color de fondo oscuro */
+}
+
+.astronaut {
+    position: relative; /* Cambiar a posición relativa para que pueda posicionarse en relación con el contenedor */
+    top: 20px;
+    width: 100px;
+    height: 100px;
+    background-image: url('../assets/astronaut.svg');
+    background-size: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    animation: floating 2s ease-in-out infinite; /* Ajusta la duración y el efecto según tus preferencias */
+}
+@keyframes floating {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #fff; /* Color blanco para las estrellas */
+    border-radius: 50%; /* Hace que el punto sea redondo */
+    animation: twinkling 1s infinite;
+}
+
+.earth {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #00a4d3; /* Azul claro */
+    border-radius: 50%;
+    left: 20%;
+    bottom: 10%;
+}
+
+.moon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #ccc; /* Gris claro */
+    border-radius: 50%;
+    left: 25%;
+    bottom: 15%; /* Ajustado para que la luna esté más cerca de la tierra */
+}
+
+/* Marcadores de continentes en la tierra (ajústalos según tu diseño) */
+.continent {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #00ff00; /* Color rojo (puedes cambiarlo) */
+    border-radius: 50%;
+}
+
+.north-america { top: 10%; left: 40%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.south-america { top: 40%; left: 30%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.europe { top: 20%; left: 15%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.africa { top: 45%; left: 18%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.asia { top: 10%; left: 70%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+.australia { top: 60%; left: 75%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+
+@keyframes twinkling {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+.text-container {
+    text-align: center;
+    color: #fff; /* Color del texto blanco */
+    z-index: 2;
+    margin-top: 20px;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1.5em;
+}

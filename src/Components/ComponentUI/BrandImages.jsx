@@ -1,6 +1,6 @@
 //importaciones de react
 import React from 'react';
-import { Grid, Container, Paper, Typography } from '@mui/material';
+import { Grid, Container, Typography, useTheme } from '@mui/material';
 
 //importacion de libreria de diseño
 import { Box, styled } from "@mui/system";
@@ -11,27 +11,30 @@ const Img = styled("img")({
     height:"50%",
     objectFit:"cover",
     objectPosition:"center",
-    transition: 'transform 0.3s ease', // Agrega una transición suave al efecto de zoom
+    transition: 'transform 0.3s ease', //transicion
     '&:hover': {
-        transform: 'scale(1.1)', // Puedes ajustar el valor para controlar el nivel de acercamiento
+        transform: 'scale(1.1)', //acercamiento
     },
 });
 
 const BrandImages = ({ brandLogos }) => {
+    const theme = useTheme();
     return (
         <>
             <Container>
-                <Typography variant="h5" align="center" gutterBottom>
+                <Typography variant="h5" align="center" gutterBottom style={{ color: theme.palette.primary.main }}> 
                     Marcas que nos reconocen
                 </Typography>
                 <Grid container spacing={2}>
                     {brandLogos.map((logo, index) => (
                         <Grid item xs={4} key={index}>
                             <Box sx={{ p: 2, textAlign: 'center' }}>
-                                <Img src={logo.logo} alt={`Brand ${index}`} />
+                                <Img
+                                    src={logo.logo}
+                                    alt={`Brand ${index}`}
+                                    style={{ width: '50%', height: '50%', fill: theme.palette.primary.main }}
+                                />
                             </Box>
-                            {/* <Paper elevation={3} sx={{ p: 2, textAlign: 'center' }}>
-                            </Paper> */}
                         </Grid>
                     ))}
                 </Grid>

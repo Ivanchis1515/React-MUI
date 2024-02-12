@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Paper, Avatar, Typography } from '@mui/material';
 //importacion de libreria de diseño
 import { styled } from "@mui/system";
+import { useTheme } from '@mui/material/styles';
 
 //creacion del nuevo modulo de imagen
 const Img = styled("img")({
@@ -21,11 +22,16 @@ const CardPersonality = styled(Paper)({
       boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
     },
 });  
-const AvatarWrapper = styled(Avatar)({
-  backgroundColor: '#1976D2',
-});
+const AvatarWrapper = styled(Avatar)(({ theme }) => ({
+    backgroundColor: theme.palette.primary.main, // Usa el color primario del tema
+    '& img': {
+        objectFit: 'cover',
+        objectPosition: 'center'
+    }
+}));
 
 const CustomCard = ({featuresData}) => {
+    const theme = useTheme();
     return (
         <>
             <Grid container spacing={4}>
@@ -35,7 +41,7 @@ const CustomCard = ({featuresData}) => {
                             <AvatarWrapper>
                                 <Img src={feature.icon} alt={feature.title} />
                             </AvatarWrapper>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography variant="h6" gutterBottom style={{ color: theme.palette.primary.main }}>
                                 {feature.title}
                             </Typography>
                             <Typography variant="body1">

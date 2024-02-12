@@ -34,3 +34,5 @@ Instalacion de comandos
     npm install react-spring
 15. Para hacer carrusel de imagenes
     npm install react-slick slick-carousel
+16. Uso de reCaptcha
+    npm install react-google-recaptcha

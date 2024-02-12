@@ -23,7 +23,7 @@ import '@fontsource/roboto/700.css';
 
 const App = () => {
   //variables de cambio
-  const [mainColor, setMainColor] = useState('#3f51b5'); // Color inicial
+  const [mainColor, setMainColor] = useState('#0083ff'); // Color inicial
   const [darkMode, setDarkMode] = useState(false); //cambia el modo
 
   const toggleDarkMode = () => {

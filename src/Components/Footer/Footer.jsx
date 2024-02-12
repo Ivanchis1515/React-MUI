@@ -1,43 +1,20 @@
 //importaciones de react
-import React, { useState } from 'react'; //hooks
-import { useSpring, animated } from 'react-spring'; //animaciones de react
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import React from 'react'; //hooks
+import { Box, Divider, Grid, Typography, Button } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom'; //enruteria de react
 
 //importaciones de diseño personalizadas
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 
 //importaciones de iconos
-import Logo from '../../assets/Cohete2.svg';
-
-//animacion tipo pop-up
-const popUpAnimation = keyframes`
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-
-//modulo de imagen animada
-const AnimatedImg = styled('img')`
-  &:active {
-    animation: ${popUpAnimation} 0.2s ease;
-  }
-`;
+import RocketIcon from '@mui/icons-material/Rocket';
 
 const Footer = ({ ArrayNavLinks }) => {
     const navigate = useNavigate();
-    const handleRocketClick = () => {
-        setTimeout(() => {
-            // Redireccionar a la pantalla de inicio
-            navigate('/');
-        }, 500);
+
+    const handleRocketButtonClick = () => {
+        // Redireccionar a la pantalla de inicio
+        navigate('/');
     };
 
     return (
@@ -47,13 +24,15 @@ const Footer = ({ ArrayNavLinks }) => {
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
                         <Typography variant="subtitle2">
-                            <RouterLink to="/" underline="none" title="Home">
-                                <AnimatedImg
-                                    src={Logo}
-                                    alt="Logo"
-                                    onClick={handleRocketClick}
-                                />
-                            </RouterLink>
+                            <Button
+                                component={RouterLink}
+                                to="/"
+                                underline="none"
+                                title="Home"
+                                onClick={handleRocketButtonClick}
+                            >
+                                <RocketIcon sx={{ fontSize: 40 }} />
+                            </Button>
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={12}>

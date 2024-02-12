@@ -1,6 +1,7 @@
 //importaciones de react
 import React, { useEffect } from 'react';
-import { Container, Typography, Grid, Button, Card, CardMedia, Box } from "@mui/material";
+import { Container, Typography, Grid, Button, Box } from "@mui/material";
+import { useTheme } from '@mui/material/styles';
 
 //importacion de libreria de diseño
 import { styled } from "@mui/system";
@@ -47,21 +48,48 @@ const featuresData = [
 const products = [
   {
     image: 'https://media.gq.com.mx/photos/61e70ca25def32c5619cef06/4:3/w_712,h_534,c_limit/Lenovo%20Yoga%20Slim%207%20Pro.jpg',
-    title: 'Laptops',
-    description: 'Un computador portátil o laptop es un equipo personal que puede ser transportado fácilmente. Muchos de ellos están diseñados para soportar software y archivos igual de robustos a los que procesa un computador de escritorio.',
-    to: '/product/laptops'
+    title: 'Computadoras',
+    description: 'Un computador o laptop es un equipo personal que puede ser transportado fácilmente.' +
+    ' Muchos de ellos están diseñados para soportar software y archivos igual de robustos a los que procesa un computador de escritorio.',
+    to: '/catalog/computadoras'
   },
   {
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEVf4oyO0oxPauwtxOBKbQ3yMvXneC7KR-Ea4-0PfUZItS6rzXwTm5gR6qC70r4j7crmc&usqp=CAU',
-    title: 'Smartphones',
-    description: 'Los Smartphones, o teléfonos inteligentes, son pequeños dispositivos que integran funcionalidades de teléfono móvil con las funcionalidades más comunes de un PDA (asistente digital personal), además permiten a los usuarios almacenar información, enviar y recibir mensajes, E-mail e instalar programas.',
-    to: '/product/smartphones'
+    image: 'https://d500.epimg.net/cincodias/imagenes/2020/11/16/lifestyle/1605555641_363320_1605556525_noticia_normal.jpg',
+    title: 'Telefonía',
+    description: 'Los Smartphones, o teléfonos inteligentes, son pequeños dispositivos que integran funcionalidades de teléfono móvil' +
+    ' con las funcionalidades más comunes de un PDA (asistente digital personal), además permiten a los usuarios almacenar información, ' +
+    'enviar y recibir mensajes, E-mail e instalar programas.',
+    to: '/catalog/telefonos-moviles'
   },
   {
     image: 'https://www.shutterstock.com/image-photo/gadgets-accessories-isolated-on-white-600nw-1248412693.jpg',
     title: 'Accesorios',
-    description: 'Se suele llamar accesorio a todo aquel elemento que forma parte de un sistema o de una máquina, una vez definida esta como producto o subproducto básico. Sirve para que la misma ejecute o no la función para la que se prepara.',
-    to: '/product/accesories'
+    description: 'Se suele llamar accesorio a todo aquel elemento que forma parte de un sistema o de una máquina, '+
+    'una vez definida esta como producto o subproducto básico. Sirve para que la misma ejecute o no la función para la que se prepara.',
+    to: '/catalog/accesorios'
+  },
+  {
+    image: 'https://lh4.googleusercontent.com/dIVS3FgXFy56vXsMvLR0KDlE6RB5RB5AEEvjrP280E4nQwGVdJdqUYSphe0mAUpuP2eFR6Q1MN3MHES4EBZxD-gZbyyglrlGJ_A0v-K12Jpk_V5Kvn56IxHnidHfCYdKfLR74Qne=s0',
+    title: 'Camaras y fotografía',
+    description: 'La cámara es un dispositivo parecido a una caja oscura, que es capaz de crear imágenes dejando' +
+    ' pasar la luz el tiempo preciso para que un sensor digital o una película puedan registrar los rayos de luz' +
+    ' procedentes del entorno y de los objetos, para finalmente, convertirlos en una imagen nítida.',
+    to: '/catalog/camaras-y-fotografia'
+  },
+  {
+    image: 'https://imagenes.razon.com.mx/files/image_940_470/uploads/2021/05/17/60a31ac975d04.png',
+    title: 'Audio y Video',
+    description: 'Los artículos de audio y video actualmente son elementos indispensables en nuestra vida diaria.' +
+    ' Los usamos en nuestros hogares, cuando estamos de viaje, en la escuela y en el trabajo, prácticamente en todo momento.',
+    to: '/catalog/audio-y-video'
+  },
+  {
+    image: 'https://www.elfinanciero.com.mx/resizer/qoY09W_IR_n_NuVcvltway9xdLo=/1440x810/filters:format(jpg):quality(70)/cloudfront-us-east-1.images.arcpublishing.com/elfinanciero/KY6U3WCR5BC35LMGZ3BK5TZ7NM.jpeg',
+    title: 'Juegos y consolas',
+    description: 'Los gamers de verdad no solamente son fanáticos de los videojuegos.' +
+    ' También son grandes conocedores de la tecnología en entretenimiento más actual y de todo lo relacionado con sus consolas y juegos favoritos.'
+    + ' Los gamers de corazón invierten en los mejores accesorios para hacer su experiencia de juego mucho más divertida e inmersiva.',
+    to: '/catalog/juegos-y-consolas'
   },
 ];
 //ofertas disponibles array
@@ -83,6 +111,7 @@ const productsCarrusel = [
     author: 'Cliente Feliz 2',
   },
 ];
+//array con los logos
 const brandLogos = [
   {
     name: "Samsung",
@@ -109,8 +138,7 @@ const Img = styled("img")({
 const HeroSection = styled('div')({
   textAlign: 'center',
   padding: '50px 0',
-  backgroundColor: '#2196F3',
-  color: 'white',
+  backgroundColor: '#FFFFF',
 });
 
 const HeroContent = styled('div')({
@@ -118,6 +146,7 @@ const HeroContent = styled('div')({
 });
 
 const Home = () => {
+  const theme = useTheme();
   useEffect(() => {
     AOS.init({ once: true });
   }, []);
@@ -142,13 +171,13 @@ const Home = () => {
                     Convierte tus deseos
                     <br />
                     en 
-                    <span style={{ color: '#ff9800' }}> realidad.</span>
+                    <span style={{ color: theme.palette.primary.main }}> realidad.</span>
                   </Typography>
                   <Typography variant="h6">
                     Nosotros haremos que encuentre su producto ideal, mientras usted
                     ahorra su preciado tiempo.
                   </Typography>
-                  <Button variant="contained" color="secondary">
+                  <Button variant="contained" color="primary">
                     Comprar ahora
                     <ArrowRightAltIcon />
                   </Button>
@@ -160,14 +189,17 @@ const Home = () => {
       </Box>
 
       <Box sx={{mt:10}}>
-        <ImageCarousel productsCarrusel={productsCarrusel} />
+        <Typography variant="h4" align="center" gutterBottom style={{ color: theme.palette.primary.main }}>
+          Ofertas y recomendaciones
+        </Typography>
+        <ImageCarousel productsCarrusel={productsCarrusel} style={{ color: theme.palette.primary.main }} />
       </Box>
 
       <Container>
         <Box sx={{mt:10}}>
         {/* Seccion de prodcutos */}
-          <Typography variant="h4" align="center" gutterBottom>
-            Productos Destacados
+          <Typography variant="h4" align="center" gutterBottom style={{ color: theme.palette.primary.main }}>
+            Conoce nuestras categorías
           </Typography>
           <Grid container spacing={3}>
             {products.map((product, index) => (
@@ -184,22 +216,24 @@ const Home = () => {
           {/* Sección de Características */}
             <Grid container spacing={2} justify="center"  alignItems="center">
               <Grid item xs={12} sm={12} md={12}>
-                <Typography variant="body1" align="center" gutterBottom>
+                <Typography variant="body1" align="center" gutterBottom style={{ color: theme.palette.primary.main }}>
                   Características
                 </Typography>
                 <Typography variant="h3" align="center" gutterBottom>
-                  El sitio flexible <br /> para todo tipo de negocios.
+                  El sitio 
+                  <span style={{ color: theme.palette.primary.main }}> flexible</span> 
+                  <br /> para todo tipo de negocios.
                 </Typography>
                 <Typography variant="h6" align="center">
                   Aqui encontrará todo tipo de articulos para todas las necesidades
                   <br /> Al alcance de un click.
                 </Typography>
                 <Typography align="center">
-                  <Button variant="contained" color="secondary" size="large">
+                  <Button variant="contained" color="primary" size="large">
                     Comprar ahora
                   </Button>
                 </Typography>
-                <Box sx={{mt:5}}>
+                <Box sx={{mt:10}}>
                   <CustomCard featuresData={featuresData} />
                 </Box>
               </Grid>

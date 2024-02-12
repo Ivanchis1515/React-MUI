@@ -1,6 +1,6 @@
 //importaciones de react
-import { AppBar, Box, Button, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
+import { AppBar, Box, Button, Drawer, IconButton, Toolbar, Typography, MenuItem, Menu  } from "@mui/material";
 import { NavLink } from "react-router-dom"; //navegacion sin actualizacion de reacy
 
 import styled from "@emotion/styled"; //libreria de diseño MUI
@@ -9,20 +9,21 @@ import styled from "@emotion/styled"; //libreria de diseño MUI
 import ColorPickerIndicator from "../ComponentUI/ColorPicker";
 
 //iconos de MUI
-import MenuIcon from "@mui/icons-material/Menu";
-import Logo from "../../assets/cohete2.svg";
+import MenuIcon from '@mui/icons-material/Menu';
 
 //importacion del Drawer
 import DrawerIcons from "./NavbarDrawerList";
 
 const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMode}) => {
-    //creacion del nuevo modulo de imagen
-    const Img = styled("img")({
-        width:50,
-        height:"100%",
-        objectFit:"cover",
-        objectPosition:"center",
-    });
+    const [anchorEl, setAnchorEl] = useState(null); //cambio de estado del menu despegable
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+    
     //creacion de la variable de estado para cambiar el estado de la nav
     const [open, setopen] = useState(false);
     return(
@@ -39,12 +40,17 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
                     >       
                         <MenuIcon />
                     </IconButton>
-                    <Img src={Logo} alt="Logo" style={{ marginRight: '8px' }} />
+                    {/* <Img src={Logo} alt="Logo" style={{ marginRight: '8px' }} /> */}
                     <Typography  variant="h6" sx={{ flexGrow: 1 }}>Power*Tech</Typography>
-                    <ColorPickerIndicator handleColorChange={handleColorChange} handleToggleDarkMode={handleToggleDarkMode} darkMode={darkMode} colors={['#0083ff', '#f50057']} />
+                    <ColorPickerIndicator 
+                        handleColorChange={handleColorChange} 
+                        handleToggleDarkMode={handleToggleDarkMode} 
+                        darkMode={darkMode} 
+                        colors={['#0083ff', '#f50057', "#FF5733", "#7D11F0", "#32E80F"]}
+                    />
                     <Box sx={{display:{xs:"none", sm:"block"}}}>
                         {
-                            ArrayNavLinks.map(item => (
+                            ArrayNavLinks.filter(item => !item.path.startsWith('/catalog')).map(item => (
                                 <Button 
                                     color="inherit" 
                                     key={item.title}

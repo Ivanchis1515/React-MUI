@@ -4,12 +4,14 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Typography, Card, CardContent, CardMedia, Container, Avatar, Rating, Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 //importaciones de iconos
 import StarIcon from '@mui/icons-material/Star';
 import PersonIcon from '@mui/icons-material/Person';
 
 const ImageCarousel = ({productsCarrusel}) => {
+    const theme = useTheme();
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -49,7 +51,8 @@ const ImageCarousel = ({productsCarrusel}) => {
                                         value={offer.rating}
                                         precision={0.5}
                                         readOnly
-                                        emptyIcon={<StarIcon style={{ opacity: 0.55 }} />}
+                                        emptyIcon={<StarIcon style={{ opacity: 0.55, color: theme.palette.primary.main }} />}
+                                        icon={<StarIcon style={{ color: theme.palette.primary.main }} />}
                                       />
                                     </Box>
                                 </Box>
