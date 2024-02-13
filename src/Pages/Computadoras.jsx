@@ -81,7 +81,6 @@ const Computadoras = () => {
 
         setSearchResults(filteredResults);
     }
-     
     return(
         <>
             <Container>

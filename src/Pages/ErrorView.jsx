@@ -16,8 +16,8 @@ const ErrorPage = ({ errorCode }) => {
             style={generateRandomPosition()}
         ></div>
     ));
+
     let errorMessage, errorText;
-  
     if (errorCode === 404) {
         errorMessage = "Error 404";
         errorText = "Parece que estás perdido en el espacio.";
@@ -37,7 +37,7 @@ const ErrorPage = ({ errorCode }) => {
                 {stars}
                 {/* Planeta Tierra y Luna */}
                 <div className="earth">
-                    {/* Marcadores de continentes (puedes personalizar según tu diseño) */}
+                    {/* Marcadores de continentes */}
                     <div className="continent north-america"></div>
                     <div className="continent south-america"></div>
                     <div className="continent europe"></div>
