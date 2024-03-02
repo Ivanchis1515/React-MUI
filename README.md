@@ -36,3 +36,6 @@ Instalacion de comandos
     npm install react-slick slick-carousel
 16. Uso de reCaptcha
     npm install react-google-recaptcha
+17. Instalación de Axios para peticiones GET, POST, UPDATE, DELETE
+    npm install axios
+    Ahora solo importalo en los modulos donde requieras interacción con la base de datos

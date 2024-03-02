@@ -22,9 +22,6 @@ const BrandImages = ({ brandLogos }) => {
     return (
         <>
             <Container>
-                <Typography variant="h5" align="center" gutterBottom style={{ color: theme.palette.primary.main }}> 
-                    Marcas que nos reconocen
-                </Typography>
                 <Grid container spacing={2}>
                     {brandLogos.map((logo, index) => (
                         <Grid item xs={4} key={index}>

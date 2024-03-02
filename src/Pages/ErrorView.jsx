@@ -3,20 +3,6 @@ import React from 'react';
 import './Error404.css'; // Importa el archivo de estilos
 
 const ErrorPage = ({ errorCode }) => {
-    const generateRandomPosition = () => {
-        return {
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-        };
-    };
-    const stars = Array.from({ length: 100 }, (_, index) => (
-        <div
-            key={index}
-            className="star"
-            style={generateRandomPosition()}
-        ></div>
-    ));
-
     let errorMessage, errorText;
     if (errorCode === 404) {
         errorMessage = "Error 404";
@@ -30,26 +16,46 @@ const ErrorPage = ({ errorCode }) => {
     }
     return(
         <>
-            <div className="error-container">
-                {/* Astronauta */}
-                <div className="astronaut"></div>
-                {/* Estrellas */}
-                {stars}
-                {/* Planeta Tierra y Luna */}
-                <div className="earth">
-                    {/* Marcadores de continentes */}
-                    <div className="continent north-america"></div>
-                    <div className="continent south-america"></div>
-                    <div className="continent europe"></div>
-                    <div className="continent africa"></div>
-                    <div className="continent asia"></div>
-                    <div className="continent australia"></div>
-                </div>
-                <div className="moon"></div>
-                {/* Texto de error */}
-                <div className="text-container">
-                    <h1>{errorMessage}</h1>
-                    <p>{errorText}</p>
+            <div className="bg-purple">      
+                <div className="stars">
+                    <div className="custom-navbar">
+                        <div className="brand-logo">
+                            <img src="http://salehriaz.com/404Page/img/logo.svg" width="80px" />
+                        </div>
+                        <div className="navbar-links">
+                            <ul>
+                                    {/* <li><a href="http://salehriaz.com/404Page/404.html" target="_blank">Home</a></li>
+                                    <li><a href="http://salehriaz.com/404Page/404.html" target="_blank">About</a></li>
+                                    <li><a href="http://salehriaz.com/404Page/404.html" target="_blank">Features</a></li>
+                                    <li><a href="http://salehriaz.com/404Page/404.html" className="btn-request" target="_blank">Request A Demo</a></li> */}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="central-body">
+                        <div className="image-404">
+                            <h1>{errorMessage}</h1>
+                            <p className="split-p">{errorText}</p>
+                        </div>
+                        {/* <img className="image-404" src="http://salehriaz.com/404Page/img/404.svg" width="300px" /> */}
+                        {/* <a href="http://salehriaz.com/404Page/404.html" className="btn-go-home" target="_blank">Regresar a inicio</a> */}
+                    </div>
+                    <div className="objects">
+                        <img className="object_rocket" src="http://salehriaz.com/404Page/img/rocket.svg" width="40px" />
+                        <div className="earth-moon">
+                            <img className="object_earth" src="http://salehriaz.com/404Page/img/earth.svg" width="100px" />
+                            <img className="object_moon" src="http://salehriaz.com/404Page/img/moon.svg" width="80px" />
+                        </div>
+                        <div className="box_astronaut">
+                            <img className="object_astronaut" src="http://salehriaz.com/404Page/img/astronaut.svg" width="140px" />
+                        </div>
+                    </div>
+                    <div className="glowing_stars">
+                        <div className="star"></div>
+                        <div className="star"></div>
+                        <div className="star"></div>
+                        <div className="star"></div>
+                        <div className="star"></div>
+                    </div>
                 </div>
             </div>
         </>

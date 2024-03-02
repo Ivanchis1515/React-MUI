@@ -1,9 +1,16 @@
 //importaciones de React
 import React, { useState } from 'react';
+//importacion de axios para peticiones al servidor
+import axios from 'axios';
 import { Container, Box, Grid, Typography, TextField, Button, Paper } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
 import { Link as RouterLink } from 'react-router-dom'; //manejador para no recargar la pagina
+import { useNavigate } from 'react-router-dom'; //permite navegar entre paginas
+
+//iconos
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
+//libreria de estilos de MUI
 import { useTheme } from '@mui/material/styles'; //para uso de temas en MUI
 
 //recursos
@@ -28,6 +35,8 @@ const opiniones = [
 ];
 
 const RegistroView = () => {
+    const navigate = useNavigate();
+
     const theme = useTheme(); //para aplicar colores a los componentes
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -36,27 +45,51 @@ const RegistroView = () => {
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
 
-    const handleRegister = (e) => {
+    //funcion asincrona que valida los campos 
+    const handleRegister = async(e) => {
+        //evita que el formulario se envie
         e.preventDefault();
 
-        // Reset previous error states
+        //reinicia los estados de las casillas para no mostrar errores
         setUsernameError(false);
         setEmailError(false);
         setPasswordError(false);
 
-        // Implement user registration logic here
+        //verifica que la casilla del nombre no este vacia cuando este quitando espacios vacios
         if (!username.trim()) {
+            //devuelve true en el estado
             setUsernameError(true);
         }
+        //verifica que no este vacio cuando quita espacios además de validar si es un correo
         if (!email.trim() || !validateEmail(email)) {
+            //devuelve true en su estado
             setEmailError(true);
         }
+        //verifica que no este vacia cuando quita espacios
         if (!password.trim()) {
+            //devuelve true en su estado
             setPasswordError(true);
         }
 
+        //si todos los campos son validos antes de hacer el registro
         if (username.trim() && email.trim() && validateEmail(email) && password.trim()) {
-            console.log('Register with:', username, email, password);
+            console.log('Register with:', username, email, password); //muestra en consola los datos antes de enviarlos
+            try{
+                //intenta conectar al servidor con metodo post
+                const response = await axios.post("http://localhost:3000/api/Register", {
+                    //envia los datos
+                    nombre:username,
+                    correo:email,
+                    contra:password
+                });
+                console.log("mensaje del servidor: ", response.data);
+                localStorage.setItem("user", JSON.stringify(response.data)); //guarda los datos en la memoria local
+                //redirecciona al inicio si tuvo exito el registro
+                navigate("/");
+                console.log("Redireccionado con éxito");
+            } catch(error){
+                console.log("Error al registrar: ", error);
+            }
         }
     };
 
@@ -75,7 +108,7 @@ const RegistroView = () => {
                         style={{ color: theme.palette.primary.main }}
                         sx={{ mt: 1, mb: 1, p: 1, bgcolor: 'primary', borderRadius: 1 }}
                     >
-                        <RouterLink color="inherit" to="/">
+                        <RouterLink color="primary" to="/">
                             Inicio
                         </RouterLink>
                         <Typography color="primary">Registrarse</Typography>

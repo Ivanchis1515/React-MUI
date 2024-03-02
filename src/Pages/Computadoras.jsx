@@ -91,7 +91,7 @@ const Computadoras = () => {
                         style={{ color: theme.palette.primary.main }}
                         sx={{ mt: 1, mb: 1, p: 1, bgcolor: 'primary', borderRadius: 1 }}
                     >
-                        <RouterLink color="inherit" to="/">
+                        <RouterLink color="primary" to="/">
                             Inicio
                         </RouterLink>
                         <Typography color="primary">Computadoras</Typography>

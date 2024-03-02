@@ -6,7 +6,7 @@ const NavbarDrawerList = ({ArrayNavLinks, NavLink, setOpen}) => {
         <>
             <Box sx={{width:250}}>
                 <nav>
-                    <List>
+                    <List sx={{ flexDirection: "column", padding: 0.5, width: "100%"}}>
                         {
                             ArrayNavLinks.map(item => (
                                 <ListItem disablePadding key={item.title}>
@@ -14,7 +14,7 @@ const NavbarDrawerList = ({ArrayNavLinks, NavLink, setOpen}) => {
                                         <ListItemIcon>
                                             {item.icon}
                                         </ListItemIcon>
-                                        <ListItemText>{item.title}</ListItemText>
+                                        <ListItemText primary={item.title} />
                                     </ListItemButton>
                                 </ListItem>
                             ))

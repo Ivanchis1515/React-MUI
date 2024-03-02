@@ -1,6 +1,6 @@
 //importaciones de react
 import React, { useEffect } from 'react';
-import { Container, Typography, Grid, Button, Box } from "@mui/material";
+import { Container, Typography, Grid, Button, Box, Paper, Divider } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 
 //importacion de libreria de diseño
@@ -11,6 +11,8 @@ import CustomCard from "../Components/ComponentUI/CustomCard";
 import ReusableProductCard from "../Components/ComponentUI/CardProduct";
 import ImageCarousel from "../Components/ComponentUI/CarruselImages";
 import BrandImages from "../Components/ComponentUI/BrandImages";
+import TestimonialData from '../Components/ComponentUI/testimonialData';
+import OfferImages from '../Components/ComponentUI/OfferImages';
 
 //importacion de animaciones
 import AOS from 'aos';
@@ -111,6 +113,12 @@ const productsCarrusel = [
     author: 'Cliente Feliz 2',
   },
 ];
+//array con las ofertas del diaria
+const offerImages = [
+  'https://doto.vtexassets.com/assets/vtex.file-manager-graphql/images/1b65f23e-0d7f-46c2-bc45-3dbc29e6e6cb___78d4feec9015b3316579e7cf42cef4b4.png',
+  'https://doto.vtexassets.com/assets/vtex.file-manager-graphql/images/c8d17ed6-a3cd-4694-984c-cf79f8d29207___7bfab8f485b0bba1aa3aa37da4746876.png',
+  'https://doto.vtexassets.com/assets/vtex.file-manager-graphql/images/678d9d89-6011-46b6-b178-b0b9af38cf87___cf0a2e777b54af8b8e70b1943abf74c4.png'
+]
 //array con los logos
 const brandLogos = [
   {
@@ -124,6 +132,21 @@ const brandLogos = [
   {
     name: "Iphone",
     logo: iphone
+  },
+];
+//array con los testimonios de personas
+const testimonial = [
+  {
+    name: 'Jose Angel Luna Sedeño',
+    ocupation: 'Desarrollador',
+    recommendations: 'Me encanta la aplicación para obtener reembolsos en efectivo, puntos de recompensa y protección contra fraude, tal como cuando pasas tu tarjeta.',
+    rating: 3.5,
+  },
+  {
+    name: 'Arlet Perez',
+    ocupation: 'Desarrolladora',
+    recommendations: '¡Comprar con Power es fantástico!. Componentes simples y claros, todo en una sola plataforma.',
+    rating: 5,
   },
 ];
 
@@ -173,10 +196,12 @@ const Home = () => {
                     en 
                     <span style={{ color: theme.palette.primary.main }}> realidad.</span>
                   </Typography>
-                  <Typography variant="h6">
+                  {/* Borrar */}
+                  <Typography variant="h6"> 
                     Nosotros haremos que encuentre su producto ideal, mientras usted
                     ahorra su preciado tiempo.
                   </Typography>
+                  {/*  */}
                   <Button variant="contained" color="primary">
                     Comprar ahora
                     <ArrowRightAltIcon />
@@ -190,9 +215,18 @@ const Home = () => {
 
       <Box sx={{mt:10}}>
         <Typography variant="h4" align="center" gutterBottom style={{ color: theme.palette.primary.main }}>
-          Ofertas y recomendaciones
+          Ofertas del día
         </Typography>
-        <ImageCarousel productsCarrusel={productsCarrusel} style={{ color: theme.palette.primary.main }} />
+        {/* Grid para colocar el carrusel y las imágenes de ofertas en fila */}
+        {/* Carrusel */}
+        <Grid item xs={12} md={6}>
+          <ImageCarousel productsCarrusel={productsCarrusel} />
+        </Grid>
+
+        {/* Imágenes de ofertas del día */}
+        <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 5 }}>
+          <OfferImages offerImages={offerImages} />
+        </Grid>
       </Box>
 
       <Container>
@@ -209,14 +243,47 @@ const Home = () => {
         </Box>
 
         <Box sx={{mt:10}}>
+          <Typography variant="h4" align="center" gutterBottom style={{ color: theme.palette.primary.main }}> 
+            Aquí encontrarás.
+          </Typography>
           <BrandImages brandLogos={brandLogos} />
         </Box>
 
         <Box sx={{mt:10}}>
+          <Grid container spacing={4}>
+            {/* Lado Izquierdo (Usando Paper para el estilo del contenedor) */}
+            <Grid item xs={12} md={6}>
+              <Box>
+                <Typography variant="h3" sx={{ fontSize: '2.5rem', whiteSpace: 'pre-line' }}>
+                  Amado por empresas e individuos{'\n'}de todo el mundo.
+                </Typography>
+              </Box>
+              <Box sx={{mt:2}}>
+                <Typography variant="h6" sx={{whiteSpace: 'pre-line'}}>
+                  {/* Diseñamos y desarrollamos sitios web y productos digitales increíbles{'\n'}para startups, empresas y para nosotros mismos. */}
+                  Nos esforzamos por brindar calidad en todos nuestros servicios y ofrecemos{'\n'}una amplia variedad de categorías, desde celulares hasta consolas y gadgets, a precios competitivos.
+                </Typography>
+              </Box>
+            </Grid>
+
+            {/* Lado Derecho (Testimonio) */}
+            <Grid item xs={12} md={6}>
+              <Box sx={{ mt: 5 }}>
+                <Typography variant="h4" align="center" gutterBottom color="primary">
+                  Lo que dicen nuestros clientes.
+                </Typography>
+                <TestimonialData testimonial={testimonial} />
+                {/* Otros elementos en tu componente principal */}
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      
+        <Box sx={{mt:10}}>
           {/* Sección de Características */}
             <Grid container spacing={2} justify="center"  alignItems="center">
               <Grid item xs={12} sm={12} md={12}>
-                <Typography variant="body1" align="center" gutterBottom style={{ color: theme.palette.primary.main }}>
+                <Typography variant="h4" align="center" gutterBottom style={{ color: theme.palette.primary.main }}>
                   Características
                 </Typography>
                 <Typography variant="h3" align="center" gutterBottom>
