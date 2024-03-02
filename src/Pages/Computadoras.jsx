@@ -4,9 +4,9 @@ import { Container, Typography, TextField, Grid } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
 import { Link as RouterLink } from 'react-router-dom'; //manejador para no recargar la pagina
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 //iconos
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 //recursos
 import IndividuallyProduct from "../Components/ComponentUI/IndividuallyProduct";
@@ -87,12 +87,16 @@ const Computadoras = () => {
                 <Grid item xs={12} md={6}>
                     <Breadcrumbs
                         separator={<NavigateNextIcon fontSize="small" />}
-                        aria-label="breadcrumb"
+                        // aria-label="breadcrumb"
                         style={{ color: theme.palette.primary.main }}
-                        sx={{ mt: 1, mb: 1, p: 1, bgcolor: 'primary', borderRadius: 1 }}
+                        sx={{ mt: 1, mb: 1, p: 1, borderRadius: 1}}
                     >
-                        <RouterLink color="primary" to="/">
-                            Inicio
+                        <RouterLink 
+                            to="/"
+                        >
+                            <Typography color="primary">
+                                Inicio  
+                            </Typography>
                         </RouterLink>
                         <Typography color="primary">Computadoras</Typography>
                     </Breadcrumbs>

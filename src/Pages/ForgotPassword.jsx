@@ -48,13 +48,17 @@ const ForgotPassword = () => {
                         separator={<NavigateNextIcon fontSize="small" />}
                         aria-label="breadcrumb"
                         style={{ color: theme.palette.primary.main }}
-                        sx={{ mt: 1, mb: 1, p: 1, bgcolor: 'primary', borderRadius: 1 }}
+                        sx={{ mt: 1, mb: 1, p: 1 }}
                     >
-                        <RouterLink color="inherit" to="/">
-                            Inicio
+                        <RouterLink to="/" >
+                            <Typography color="primary">
+                                Inicio  
+                            </Typography>
                         </RouterLink>
-                        <RouterLink color="inherit" to="/Login">
-                            Iniciar sesión
+                        <RouterLink to="/Login" >
+                            <Typography color="primary">
+                                Iniciar sesión  
+                            </Typography>
                         </RouterLink>
                         <Typography color="primary">Reestablecer contraseña</Typography>
                     </Breadcrumbs>
