@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 //importacion de axios para peticiones al servidor
 import axios from 'axios';
-import { Container, Box, Grid, Typography, TextField, Button, Paper } from '@mui/material';
+import { Container, Box, Grid, Typography, TextField, Button, Paper, Snackbar, Alert } from '@mui/material';
+import ReCAPTCHA from "react-google-recaptcha"; //Google Recaptcha
 import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
-import { Link as RouterLink } from 'react-router-dom'; //manejador para no recargar la pagina
-import { useNavigate } from 'react-router-dom'; //permite navegar entre paginas
+import { Link as RouterLink, useNavigate } from 'react-router-dom'; //manejador para no recargar la pagina
 
 //iconos
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -35,15 +35,35 @@ const opiniones = [
 ];
 
 const RegistroView = () => {
+    const theme = useTheme(); //para aplicar colores a los componentes
     const navigate = useNavigate();
 
-    const theme = useTheme(); //para aplicar colores a los componentes
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [usernameError, setUsernameError] = useState(false);
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
+    const [username, setUsername] = useState(''); //estado para el nombre de usuario
+    const [email, setEmail] = useState(''); //estado para el email
+    const [password, setPassword] = useState(''); //estado para la contraseña
+    const [usernameError, setUsernameError] = useState(false); //estado para el error del nombre de usuario
+    const [emailError, setEmailError] = useState(false); //estado para el error del email
+    const [passwordError, setPasswordError] = useState(false); //estado para el error de la contraseña
+    const [isCaptchaComplete, setIsCaptchaComplete] = useState(false); //si el captcha se completo
+    const [snackbarOpen, setSnackbarOpen] = useState(false); //estado para abrir el snack
+    const [snackbarMessage, setSnackbarMessage] = useState(''); //mensaje
+
+    //VALIDACION CON REGEX AL CAMPO EMAIL
+    const validateEmail = (email) => {
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    //validar el captcha
+    const handleRecaptchaChange = (value) => {
+        setIsCaptchaComplete(true);
+    };
+
+    //cerrar la barra de estado
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
 
     //funcion asincrona que valida los campos 
     const handleRegister = async(e) => {
@@ -72,7 +92,7 @@ const RegistroView = () => {
         }
 
         //si todos los campos son validos antes de hacer el registro
-        if (username.trim() && email.trim() && validateEmail(email) && password.trim()) {
+        if (username.trim() && email.trim() && validateEmail(email) && password.trim() && isCaptchaComplete) {
             console.log('Register with:', username, email, password); //muestra en consola los datos antes de enviarlos
             try{
                 //intenta conectar al servidor con metodo post
@@ -88,19 +108,42 @@ const RegistroView = () => {
                 navigate("/");
                 console.log("Redireccionado con éxito");
             } catch(error){
-                console.log("Error al registrar: ", error);
+                setSnackbarMessage(`Error al registrar: ${error.message}`);
+                setSnackbarOpen(true);
             }
-        }
-    };
+        } else{
+            //muestra al usuario en que tipo de campo se equivoco
+            let errorMessage = '';
+            if (!username.trim()) {
+                setUsernameError(true);
+                errorMessage = 'Ingrese un nombre de usuario válido.';
+            } else if (!email.trim() || !validateEmail(email)) {
+                setEmailError(true);
+                errorMessage = 'Ingrese un correo electrónico válido.';
+            } else if (!password.trim()) {
+                setPasswordError(true);
+                errorMessage = 'Ingrese una contraseña válida.';
+            } else if (!isCaptchaComplete) {
+                errorMessage = 'Complete el captcha.';
+            }
 
-    const validateEmail = (email) => {
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+            setSnackbarMessage(errorMessage);
+            setSnackbarOpen(true);
+        }
     };
     return (
         <>
             <Container>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert severity="error" onClose={handleSnackbarClose} sx={{ width: '100%' }}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
                 <Grid item xs={12} md={6}>
                     <Breadcrumbs
                         separator={<NavigateNextIcon fontSize="small" />}
@@ -197,6 +240,20 @@ const RegistroView = () => {
                                                         Inicia sesión aqui.
                                                     </RouterLink>
                                                 </Typography>
+                                                <Box display="flex" justifyContent="center" mt={2}>
+                                                    <ReCAPTCHA
+                                                        sitekey="6LdwZmspAAAAANUS3pN7mHhG7RGm6mA9v6ZIZxjf"
+                                                        onChange={(value) => {
+                                                            handleRecaptchaChange(value);
+                                                            // setIsCaptchaComplete(true);
+                                                        }}
+                                                    />
+                                                </Box>
+                                                {!isCaptchaComplete && (
+                                                    <Typography variant="caption" color="error">
+                                                        Por favor, completa el captcha.
+                                                    </Typography>
+                                                )}
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Button

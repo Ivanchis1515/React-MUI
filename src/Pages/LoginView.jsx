@@ -1,14 +1,21 @@
 //importaciones de react
 import React, {useState} from 'react';
-import { Container, Box, Grid, Typography, TextField, Button, Paper,} from '@mui/material';
-import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
-import { Link as RouterLink } from 'react-router-dom'; //manejador para no recargar la pagina
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { useTheme } from '@mui/material/styles'; //para uso de temas en MUI
+import { Container, Box, Grid, Typography, TextField, Button, Paper, Snackbar, Alert} from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom'; //manejador para no recargar la pagina
 import ReCAPTCHA from "react-google-recaptcha"; //Google Recaptcha
+import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
+
+import axios from 'axios'; //uso de axios para peticiones al servidor
+
+//iconos
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
+//librerias de diseño MUI
+import { useTheme } from '@mui/material/styles'; //para uso de temas en MUI
 
 //recursos
 import Carrusel from "../Components/ComponentUI/CarruselImages";
+
 const opiniones = [
     { 
         title: "ReseñaChida", 
@@ -27,66 +34,100 @@ const opiniones = [
 ];
 const LoginForm = () => {
     const theme = useTheme();
-    const [isCaptchaComplete, setIsCaptchaComplete] = useState(false);
+    const navigate = useNavigate();
+
+    const [email, setEmail] = useState(''); //cambio de estado para el correo
+    const [password, setPassword] = useState(''); //cambio de estado para la contra
+    const [emailError, setEmailError] = useState(false); //si el correo es invalido
+    const [passwordError, setPasswordError] = useState(false); //si la contraseña es invalida
+    const [isCaptchaComplete, setIsCaptchaComplete] = useState(false); //si el captcha se completo
+    const [snackbarOpen, setSnackbarOpen] = useState(false); //estado para abrir el snack
+    const [snackbarMessage, setSnackbarMessage] = useState(''); //mensaje
+
+    //VALIDACION CON REGEX AL CAMPO EMAIL
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    //validar el captcha
     const handleRecaptchaChange = (value) => {
         setIsCaptchaComplete(true);
     };
 
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
-    
-    const [formErrors, setFormErrors] = useState({
-        email: '',
-        password: '',
-    });
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+    //cerrar la barra de estado
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
     };
-    const handleSubmit = (e) => {
-        e.preventDefault();
+
+    const handleLogin = async(e) => {
+        e.preventDefault(); //deten el envio de formulario
+
+        //reinicia nuevamente los formularios
+        setEmailError(false);
+        setPasswordError(false);
     
-        if (!isCaptchaComplete) {
-            console.log('Por favor, completa el captcha');
-            return;
+        //si el campo correo no esta vacio y es valido
+        if (!email.trim() || !validateEmail(email)) {
+            //actualiza su valor a verdadero
+            setEmailError(true);
         }
-        // Validación del formulario
-        let valid = true;
-        const errors = {
-            email: '',
-            password: '',
-        };
-    
-        // Validar correo electrónico
-        if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) {
-            valid = false;
-            errors.email = 'Ingrese un correo electrónico válido';
+
+        //si el campo contraseña no esta vacio
+        if (!password.trim()) {
+            //actualiza su valor a verdadero
+            setPasswordError(true);
         }
+
+        if (email.trim() && validateEmail(email) && password.trim() && isCaptchaComplete) {
+            try {
+                //intenta acceder a la api
+                const response = await axios.post("http://localhost:3000/api/Login", {
+                    correo: email,
+                    contra: password,
+                });
     
-        // Validar contraseña
-        if (!formData.password) {
-            valid = false;
-            errors.password = 'Ingrese una contraseña';
-        }
-    
-        // Actualizar los errores y, si es válido, continuar con la lógica de inicio de sesión
-        setFormErrors(errors);
-    
-        if (valid) {
-            // Lógica de inicio de sesión
-            console.log('Inicio de sesión exitoso');
+                //si la respuesta del servidor es 200
+                if (response.status === 200) {
+                    const data = response.data; //convierte la respuesta en un objeto
+                    localStorage.setItem("user", JSON.stringify(data)); //guarda los datos del usuario en la localStorage
+                    navigate("/"); //redirecciona a la pagina principal
+                }
+            } catch (error) {
+                //sino se pudo muestra un error
+                setSnackbarMessage('Error al procesar la solicitud: ' + error.message);
+                setSnackbarOpen(true);
+            }
         } else {
-            console.log('Error en el formulario. Por favor, revise los campos.');
+            //muestra al usuario en que tipo de campo se equivoco
+            let errorMessage = '';
+            if (!email.trim() || !validateEmail(email)) {
+                setEmailError(true);
+                errorMessage = 'Ingrese un correo electrónico válido.';
+            } else if (!password.trim()) {
+                setPasswordError(true);
+                errorMessage = 'Ingrese una contraseña.';
+            } else if (!isCaptchaComplete) {
+                errorMessage = 'Complete el captcha.';
+            }
+
+            setSnackbarMessage(errorMessage);
+            setSnackbarOpen(true);
         }
-    };
+    }
     return (
         <>
             <Container>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert severity="error" onClose={handleSnackbarClose} sx={{ width: '100%' }}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
                 <Grid item xs={12} md={6}>
                     <Breadcrumbs
                         separator={<NavigateNextIcon fontSize="small" />}
@@ -104,13 +145,13 @@ const LoginForm = () => {
                 </Grid>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
-                        {/* Aquí colocarías tu formulario de inicio de sesión */}
                         <Paper>
                             {/* Carrusel de opiniones */}
                             <Typography variant="h6">Opiniones de Clientes</Typography>
                             <Carrusel productsCarrusel = {opiniones}/>
                         </Paper>
                     </Grid>
+                    {/* Aquí colocarías tu formulario de inicio de sesión */}
                     <Grid item xs={12} md={6}>
                         <Box p={3} textAlign="center">
                             <Grid container spacing={2}>
@@ -126,7 +167,7 @@ const LoginForm = () => {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <form onSubmit={handleSubmit}>
+                                    <form onSubmit={handleLogin}>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12}>
                                                 <Typography variant="subtitle2">
@@ -137,11 +178,11 @@ const LoginForm = () => {
                                                     label="Correo electrónico *"
                                                     variant="outlined"
                                                     name="email"
-                                                    type="text"
+                                                    type="email"
                                                     required
-                                                    error={!!formErrors.email}
-                                                    helperText={formErrors.email}
-                                                    onChange={handleInputChange}
+                                                    error={emailError}
+                                                    helperText={emailError ? 'Ingresa un correo electrónico válido' : ''}
+                                                    onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -158,9 +199,9 @@ const LoginForm = () => {
                                                     name="password"
                                                     type="password"
                                                     required
-                                                    error={!!formErrors.password}
-                                                    helperText={formErrors.password}
-                                                    onChange={handleInputChange}
+                                                    error={passwordError}
+                                                    helperText={passwordError ? 'Ingresa una contraseña válida' : ''}
+                                                    onChange={(e) => setPassword(e.target.value)}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -175,17 +216,13 @@ const LoginForm = () => {
                                                         sitekey="6LdwZmspAAAAANUS3pN7mHhG7RGm6mA9v6ZIZxjf"
                                                         onChange={(value) => {
                                                             handleRecaptchaChange(value);
-                                                            setIsCaptchaComplete(true);
+                                                            // setIsCaptchaComplete(true);
                                                         }}
                                                     />
                                                 </Box>
-                                                {isCaptchaComplete ? (
-                                                    <Typography variant="caption" color="primary">
-                                                        Captcha completado correctamente.
-                                                    </Typography>
-                                                ) : (
-                                                    <Typography variant="caption" color="primary">
-                                                        Por favor, complete el captcha.
+                                                {!isCaptchaComplete && (
+                                                    <Typography variant="caption" color="error">
+                                                        Por favor, completa el captcha.
                                                     </Typography>
                                                 )}
                                             </Grid>

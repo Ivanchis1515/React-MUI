@@ -28,7 +28,7 @@ const ImageCarousel = ({productsCarrusel}) => {
             <Slider {...sliderSettings}>
                 {productsCarrusel.map((offer, index) => (
                     <Grid key={index} container justifyContent="center" alignItems="center">
-                        <Grid item xs={12} sm={12} md={6} lg={12}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
                             <Card>
                                 <CardMedia
                                     component="img"
