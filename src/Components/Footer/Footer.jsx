@@ -19,7 +19,7 @@ const Footer = ({ ArrayNavLinks }) => {
 
     return (
         <>
-            <Box sx={{ p: 3, textAlign: 'center' }}>
+            <Box sx={{ p: 3, textAlign: 'center', mt:8 }}>
                 <Divider /> 
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>

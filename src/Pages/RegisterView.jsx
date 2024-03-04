@@ -100,13 +100,15 @@ const RegistroView = () => {
                     //envia los datos
                     nombre:username,
                     correo:email,
-                    contra:password
+                    contra:password,
+                    rol: 'Cliente'
+                }, {
+                    withCredentials: true, // Añade esta línea
                 });
-                console.log("mensaje del servidor: ", response.data);
+                // console.log("mensaje del servidor: ", response.data);
                 localStorage.setItem("user", JSON.stringify(response.data)); //guarda los datos en la memoria local
                 //redirecciona al inicio si tuvo exito el registro
                 navigate("/");
-                console.log("Redireccionado con éxito");
             } catch(error){
                 setSnackbarMessage(`Error al registrar: ${error.message}`);
                 setSnackbarOpen(true);

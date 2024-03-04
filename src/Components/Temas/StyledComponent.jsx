@@ -8,7 +8,12 @@ const StyledComponent = (mainColor, isDarkMode) => {
                 main: mainColor,
             },
             secondary: {
-                main:'#f50057',
+                // Define los colores específicos que necesitas
+                light: '#EDE7F6',
+                200: '#B39DDB',
+                main: '#673AB7',
+                dark: '#5E35B1',
+                800: '#4527A0',
             },
         },
     });

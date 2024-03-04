@@ -85,6 +85,8 @@ const LoginForm = () => {
                 const response = await axios.post("http://localhost:3000/api/Login", {
                     correo: email,
                     contra: password,
+                }, {
+                    withCredentials: true, // Añade esta línea
                 });
     
                 //si la respuesta del servidor es 200

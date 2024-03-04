@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { AppBar, Box, Button, Drawer, IconButton, Toolbar, Typography, Menu, MenuItem } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom"; //navegacion sin actualizacion de react
-import { useNavigate } from 'react-router-dom'; //permite navegar entre paginas
+import { useNavigate, Link } from 'react-router-dom'; //permite navegar entre paginas
 
 //recursos
 import ColorPickerIndicator from "../ComponentUI/ColorPicker";
@@ -22,9 +22,10 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
     const [open, setopen] = useState(false); //creacion de la variable de estado para cambiar el estado de la nav
     const [nombreUsuario, setnombreUsuario] = useState(""); //cambio de estado para el usuario
     const [isAuthenticated, setIsAuthenticated] = useState(false); //verifica si esta autenticado el usuario
+    const [userRol, setUserRol] = useState(""); //estado para almacenar el rol del usuario
 
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleMenuClick = (currentTarget) => {
+        setAnchorEl(currentTarget);
     };
     
     const handleMenuClose = () => {
@@ -49,6 +50,7 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
                 // Manejo de errores si la respuesta no es exitosa
                 console.error("Error al cerrar sesión:", response.statusText);
             }
+            handleMenuClose();
         }
         catch(error){
             console.error("Error al cerrar sesión:", error.message);
@@ -58,10 +60,9 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
     // Utiliza useEffect para realizar acciones después de la renderización inicial
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user")); //obten los datos del usuario
-        console.log("Valor de user:", user);
         if (user) {
-            const { nombre } = user; //obten el valor nombre del usuario
-            console.log("Valor de nombre:", nombre); 
+            const { nombre, rol } = user; //obten el valor nombre y rol del usuario
+            setUserRol(rol); // Almacena el rol del usuario
             setnombreUsuario(nombre); //actualiza el estado con el nombre
             setIsAuthenticated(true); //devuelve validacion en el estado
         }
@@ -69,7 +70,7 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
     
     return(
         <>
-            <AppBar position="static" color="primary" elevation={1}>
+            <AppBar position="fixed" color="primary" elevation={1}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -81,20 +82,27 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
                     >       
                         <MenuIcon />
                     </IconButton>
-                    <Typography  variant="h6" sx={{ flexGrow: 1 }}>Power*Tech</Typography>
+
+                    <Typography  variant="h6" sx={{ flexGrow: 1 }}>
+                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                            Power*Tech
+                        </Link>
+                    </Typography>
+
                     <ColorPickerIndicator 
                         handleColorChange={handleColorChange} 
                         handleToggleDarkMode={handleToggleDarkMode} 
                         darkMode={darkMode} 
                         colors={['#0083ff', '#f50057', "#FF5733", "#7D11F0", "#32E80F"]}
                     />
+
                     <Box sx={{display: "flex", alignItems: "center"}}>
                         {isAuthenticated ? (
                             <>
                                 <IconButton
                                     color="inherit"
                                     aria-label="account"
-                                    onClick={handleMenuClick}
+                                    onClick={(e) => handleMenuClick(e.currentTarget)}
                                 >
                                     <AccountCircleIcon />
                                     <Typography variant="body1" sx={{ marginLeft: "5px" }}>
@@ -110,6 +118,18 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
                                 >
                                     <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
                                 </Menu>
+                                {
+                                    //muestra el botón solo si el rol es "Administrador"
+                                    userRol === "Administrador" && (
+                                        <Button
+                                            color="inherit"
+                                            component={NavLink}
+                                            to="/Dashboard"
+                                        >
+                                            Dashboard
+                                        </Button>
+                                    )
+                                }
                             </>
                         ) : (
                             <Box sx={{display:{xs:"none", sm:"block"}}}>
@@ -126,20 +146,9 @@ const Navbar = ({ArrayNavLinks, handleToggleDarkMode, handleColorChange, darkMod
                             </Box>
                         )}
                     </Box>
-                    {/* <Box sx={{display:{xs:"none", sm:"block"}}}>
-                        {
-                            ArrayNavLinks.filter(item => !item.path.startsWith('/catalog')).map(item => (
-                                <Button 
-                                    color="inherit" 
-                                    key={item.title}
-                                    component={NavLink}
-                                    to={item.path}
-                                >{item.title}</Button>
-                            ))
-                        }
-                    </Box> */}
                 </Toolbar>
             </AppBar>
+
             <Drawer
                 open={open}
                 anchor="left"

@@ -14,30 +14,48 @@ import MusicVideoIcon from '@mui/icons-material/MusicVideo';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import MouseIcon from '@mui/icons-material/Mouse';
 import RememberMeIcon from '@mui/icons-material/RememberMe';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+
 //Pantallas de la pagina
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Footer/Footer";
+//pantallas principales
 import Home from "./Pages/Home";
 import Login from "./Pages/LoginView";
 import Register from './Pages/RegisterView';
 import ForgotPassword from './Pages/ForgotPassword';
+
+//productos - clientes
 import Computadoras from './Pages/Computadoras';
 import Telefonos from './Pages/Telefonos';
 import Accesorios from './Pages/Accesorios';
-import Camaras from './Pages/Camaras';
+import Camaras from './Pages/Camaras';  
 import Audio from './Pages/Audio';
 import Juegos from './Pages/Juegos';
+//productos - administrador
+import ProductosManagment from './Pages/Admin/productosManagment';
+
 //pagina de error
 import ErrorPage from './Pages/ErrorView';
+//Dashboard
+import Dashboard from './Pages/Admin/Dashboard';
 
 //lista de rutas para navegar
 const NavLinks = [
+    //LOGIN
     {
         title: "Home", 
         path:"/",
         element: <Home />,
         icon:<HomeIcon />,
         isNavbarVisible: true,
+    },
+    {
+        title: 'Error 404',
+        path: '*',
+        element: <ErrorPage />,
+        icon: null,
+        isNavbarVisible: false,
     },
     {
         title: "Iniciar sesión", 
@@ -60,6 +78,8 @@ const NavLinks = [
         icon:<HowToRegIcon />,
         isNavbarVisible: true,
     },
+
+    //PRODUCTOS
     {
         title: "Computadoras", 
         path:"/catalog/computadoras",
@@ -102,12 +122,21 @@ const NavLinks = [
         icon:<VideogameAssetIcon />,
         isNavbarVisible: true,
     },
+
+    //Administrador
     {
-        title: 'Error 404',
-        path: '*',
-        element: <ErrorPage />,
+        title: "Dashboard",
+        path: "/Dashboard",
+        element: <Dashboard />,
+        icon: <DashboardCustomizeIcon />,
+        isNavbarVisible: false
+    },
+    {
+        title: "Productos",
+        path: "/Dashboard/Productos",
+        element: <ProductosManagment />,
         icon: null,
-        isNavbarVisible: false,
+        isNavbarVisible: false
     },
 ]
 const NavbarLinks = NavLinks.filter(item => item.isNavbarVisible);
@@ -119,7 +148,7 @@ const RoutesPages = ({handleToggleDarkMode, handleColorChange, darkMode}) => {
     return(
         <>
             <Navbar ArrayNavLinks={NavbarLinks} handleToggleDarkMode={handleToggleDarkMode} handleColorChange={handleColorChange} darkMode={darkMode}/>
-            <Container sx={{mt:2}}>
+            <Container sx={{mt:8}}>
                 <Routes>
                     {NavLinks.map(item => (
                         <Route key={item.title} path={item.path} element={item.element} />
