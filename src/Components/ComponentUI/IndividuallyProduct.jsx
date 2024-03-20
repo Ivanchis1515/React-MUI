@@ -1,6 +1,10 @@
 //importaciones de React
 import React from "react";
+
+//importaciones de MUI
 import { Container, Card, CardContent, CardMedia, Typography, Button, IconButton, Box, Grid } from "@mui/material";
+
+//importacion de paleta de colores
 import { useTheme } from '@mui/material/styles';
 
 

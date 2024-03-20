@@ -1,6 +1,6 @@
 //importaciones de react
-import React, { useEffect } from 'react';
-import { Container, Typography, Grid, Button, Box, Paper, Divider } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { Container, Typography, Grid, Button, Box, TextField } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 
 //importacion de libreria de diseño
@@ -171,12 +171,14 @@ const HeroContent = styled('div')({
 const Home = () => {
   const theme = useTheme();
   useEffect(() => {
-    AOS.init({ once: true });
+    return () => {
+      AOS.init({ once: true });
+    };
   }, []);
 
   return (
     <>
-      <Box sx={{p:0}}>
+      <Box sx={{p:0}}>  
         <HeroSection>
           <Container>
             <Grid container spacing={2}>

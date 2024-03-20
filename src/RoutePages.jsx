@@ -40,6 +40,9 @@ import ErrorPage from './Pages/ErrorView';
 //Dashboard
 import Dashboard from './Pages/Admin/Dashboard';
 
+//chatbot
+import ChatComponent from './Components/ComponentUI/Conversation';
+
 //lista de rutas para navegar
 const NavLinks = [
     //LOGIN
@@ -148,6 +151,7 @@ const RoutesPages = ({handleToggleDarkMode, handleColorChange, darkMode}) => {
     return(
         <>
             <Navbar ArrayNavLinks={NavbarLinks} handleToggleDarkMode={handleToggleDarkMode} handleColorChange={handleColorChange} darkMode={darkMode}/>
+            <ChatComponent/>
             <Container sx={{mt:8}}>
                 <Routes>
                     {NavLinks.map(item => (

@@ -38,8 +38,8 @@ const productosManagment = () => {
 
     return(
         <>
-            <Container>
-                <h1>Hola</h1>
+            <Container sx={{mt:15}}>
+                {/* <h1>Hola</h1> */}
                 <TableSelected data={data} columns={columns}/>
             </Container>
         </>
