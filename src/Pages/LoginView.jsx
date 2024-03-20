@@ -218,7 +218,6 @@ const LoginForm = () => {
                                                         sitekey="6LdwZmspAAAAANUS3pN7mHhG7RGm6mA9v6ZIZxjf"
                                                         onChange={(value) => {
                                                             handleRecaptchaChange(value);
-                                                            // setIsCaptchaComplete(true);
                                                         }}
                                                     />
                                                 </Box>

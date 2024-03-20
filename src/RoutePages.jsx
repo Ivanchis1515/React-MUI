@@ -15,6 +15,7 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import MouseIcon from '@mui/icons-material/Mouse';
 import RememberMeIcon from '@mui/icons-material/RememberMe';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import LockResetIcon from '@mui/icons-material/LockReset';
 
 //Pantallas de la pagina
 import Navbar from "./Components/Navbar/Navbar";
@@ -24,6 +25,7 @@ import Home from "./Pages/Home";
 import Login from "./Pages/LoginView";
 import Register from './Pages/RegisterView';
 import ForgotPassword from './Pages/ForgotPassword';
+import Restablecer from './Pages/Restablecer';
 
 //productos - clientes
 import Computadoras from './Pages/Computadoras';
@@ -72,6 +74,13 @@ const NavLinks = [
         path:"/forgot-password",
         element: <ForgotPassword />,
         icon:<RememberMeIcon />,
+        isNavbarVisible: false,
+    },
+    {
+        title: "Restablecer contraseña", 
+        path:"/restablecer",
+        element: <Restablecer />,
+        icon:<LockResetIcon />,
         isNavbarVisible: false,
     },
     {

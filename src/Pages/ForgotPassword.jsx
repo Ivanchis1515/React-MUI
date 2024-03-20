@@ -1,10 +1,18 @@
 //importaciones de react
 import React, {useState} from 'react';
-import { Container, Box, Grid, Typography, TextField, Button, Paper,} from '@mui/material';
+
+//importaciones de MUI
+import { Container, Box, Grid, Typography, TextField, Button, Paper, Snackbar, Alert } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs'; //migajas de pan
 import { Link as RouterLink } from 'react-router-dom'; //manejador para no recargar la pagina
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
+import ReCAPTCHA from "react-google-recaptcha"; //Google Recaptcha
+
+//importaciones de diseño
 import { useTheme } from '@mui/material/styles'; //para uso de temas en MUI
+
+import axios from 'axios'; //uso de axios para peticiones al servidor
 
 //recursos
 import Carrusel from "../Components/ComponentUI/CarruselImages";
@@ -29,20 +37,72 @@ const ForgotPassword = () => {
     //variables de cambio de estado
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+    //variables para snack
+    const [snackbarOpen, setSnackbarOpen] = useState(false); //estado para abrir el snack
+    const [snackbarMessage, setSnackbarMessage] = useState(''); //mensaje
+    //variable para el captcha
+    const [isCaptchaComplete, setIsCaptchaComplete] = useState(false); //si el captcha se completo
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    //cerrar la barra de estado
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
+    //validar el captcha
+    const handleRecaptchaChange = (value) => {
+        setIsCaptchaComplete(true);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); //deten el envio del formulario
 
         // Validar el correo electrónico
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
             setEmailError('Ingrese un correo electrónico válido');
+            setSnackbarMessage('Por favor complete todos los campos requeridos.');
+            setSnackbarOpen(true);
             return;
         }
-        setEmailError('');
+
+        if (!isCaptchaComplete) {
+            setSnackbarMessage('Por favor complete el captcha.');
+            setSnackbarOpen(true);
+            return;
+        }
+
+        setEmailError(''); //limpia en caso de errores
+
+        try {
+            const response = await axios.post("http://localhost:3000/api/Forgotpassword", {
+                correo: email,
+            }, {
+                withCredentials: true,
+            });
+
+            if (response.status === 200) {
+                // Muestra un toast de éxito
+                setSnackbarMessage("Acabamos de enviarte las instrucciones para restaurar tu contraseña por tu correo electronico");
+                setSnackbarOpen(true);       
+            }
+        } catch (error) {
+            //sino se pudo muestra un error
+            setSnackbarMessage('Error al procesar la solicitud: ' + error.message);
+            setSnackbarOpen(true);   
+        }
     };
     return(
         <>
             <Container>
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert severity="error" onClose={handleSnackbarClose} sx={{ width: '100%' }}>
+                        {snackbarMessage}
+                    </Alert>
+                </Snackbar>
                 <Grid item xs={12} md={6}>
                     <Breadcrumbs
                         separator={<NavigateNextIcon fontSize="small" />}
@@ -63,9 +123,8 @@ const ForgotPassword = () => {
                         <Typography color="primary">Reestablecer contraseña</Typography>
                     </Breadcrumbs>
                 </Grid>
-                <Grid container spacing={2}>
+                <Grid container spacing={3}>
                     <Grid item xs={12} md={6}>
-                        {/* Aquí colocarías tu formulario de inicio de sesión */}
                         <Paper>
                             {/* Carrusel de opiniones */}
                             <Typography variant="h6">Opiniones de Clientes</Typography>
@@ -73,7 +132,8 @@ const ForgotPassword = () => {
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Typography variant="body1" gutterBottom >
+                        {/* Aquí colocarías tu formulario para recuperar contraseña */}
+                        <Typography variant="body1" gutterBottom>
                             Recuperación de cuenta
                         </Typography>
                         <Typography variant="h4" gutterBottom>
@@ -97,6 +157,21 @@ const ForgotPassword = () => {
                                         error={!!emailError}
                                         helperText={emailError}
                                     />
+                                    <Box display="flex" justifyContent="center" mt={2}>
+                                        <ReCAPTCHA
+                                            sitekey="6LdwZmspAAAAANUS3pN7mHhG7RGm6mA9v6ZIZxjf"
+                                            onChange={(value) => {
+                                                handleRecaptchaChange(value);
+                                            }}
+                                        />
+                                    </Box>
+                                    <Box display="flex" justifyContent="center" mt={1}>
+                                        {!isCaptchaComplete && (
+                                            <Typography variant="caption" color="error" alignItems="center">
+                                                Por favor, completa el captcha.
+                                            </Typography>
+                                        )}
+                                    </Box>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Box display="flex" justifyContent="space-between">
@@ -108,7 +183,6 @@ const ForgotPassword = () => {
                                             variant="contained"
                                             color="primary"
                                             size="large"
-                                            onClick={handleSubmit}
                                         >
                                             Enviar para recuperar
                                         </Button>
